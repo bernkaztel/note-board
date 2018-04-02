@@ -3,6 +3,17 @@ var Note = React.createClass({
   getInitialState: function() {
     return { editing: false };
   },
+  componentWillMount: function() {
+    this.style = {
+        right: this.randomBetween(0, window.innerWidth - 150) + 'px',
+        top: this.randomBetween(0, window.innerHeight - 150) + 'px',
+        transform: 'rotate(' + this.randomBetween(-15, 15) + 'deg)'
+    };
+},
+  //Helps us generate a random number
+  randomBetween: function (min, max) {
+    return (min + Math.ceil(Math.random() * max));
+  },
   //When you click on edit is going to set the state to be editable
   edit: function() {
     this.setState({ editing: true });
@@ -22,7 +33,7 @@ var Note = React.createClass({
   //The render display is triggered if (editing: false)
   renderDisplay: function() {
     return (
-      <div className="note">
+      <div className="note" style={this.style}>
         <p>{this.props.children}</p>
         <span>
           <button
@@ -40,7 +51,7 @@ var Note = React.createClass({
   //The render form is triggered if (editing: true)
   renderForm: function() {
     return (
-      <div className="note">
+      <div className="note"  style={this.style}>
         <textarea
           ref="newText"
           defaultValue={this.props.children}
@@ -89,9 +100,17 @@ var Board = React.createClass({
       notes: []
     };
   },
+  //Generate random numbers for keys
+  nextId: function () {
+    this.uniqueId = this.uniqueId || 0; 
+    return this.uniqueId++
+  },
   add: function (text){
 var arr = this.state.notes; 
-arr.push(text);
+arr.push({
+  id: this.nextId(),
+  note: text
+});
 this.setState({notes: arr})
   },
   //This is going to take the newtext and the index.
@@ -99,12 +118,12 @@ this.setState({notes: arr})
     //Storing the state of notes
     var arr = this.state.notes;
     //Set new text instead of the old state
-    arr[i] = newText;
+    arr[i].note = newText;
     //Update the state of our notes array (After being modified)
     this.setState({ notes: arr });
   },
-  remove: function() {
-    //Storing the state of notes
+  remove: function(i) {
+    //Storing the state of notes 
     var arr = this.state.notes;
     //Removing the note of the selected index
     arr.splice(i, 1);
@@ -115,8 +134,8 @@ this.setState({notes: arr})
   eachNote: function(note, i) {
       //We are going to return the note with new events (edit and remove)
     return (
-      <Note key={i}  index={i} onChange={this.update} onRemove={this.remove}>
-        {note}
+      <Note key={note.id}  index={i} onChange={this.update} onRemove={this.remove}>
+        {note.note}
       </Note>
     );
   },
