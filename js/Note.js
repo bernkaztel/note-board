@@ -10,11 +10,15 @@ var Note = React.createClass({
     //When you click save you can't edit anymore (state: not editable)
     save: function() {
         this.setState({editing: false});
+        //getDOMNode is going to look for the value that has the "newText" attached to it. 
+        var val = this.refs.newText.getDOMNode().value;
+        alert("Save note value " + val);
     },
     remove: function() {
         alert('removing note');
     },
     //The display render is the default state of the note (it has the icon to remove and edit)
+     //The render display is triggered if (editing: false) 
     renderDisplay: function() {
         return (
             <div className="note">
@@ -28,11 +32,11 @@ var Note = React.createClass({
             </div>
             );
     },
-    //The display form is triggered if (editing: true) 
+    //The render form is triggered if (editing: true) 
     renderForm: function() {
         return (
             <div className="note">
-            <textarea defaultValue={this.props.children} 
+            <textarea  ref="newText" defaultValue={this.props.children} 
             className="form-control"></textarea>
             <button onClick={this.save} className="btn btn-success btn-sm glyphicon glyphicon-floppy-disk" />
             </div>
