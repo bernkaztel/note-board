@@ -13,7 +13,7 @@ var Note = React.createClass({
     //getDOMNode is going to look for the value that has the "newText" attached to it.
     //Whenever we trigger the event, this is going to get the value of the node at that moment 
     //We want to use the node that corresponds
-    this.props.onChange(this.refs.newText.getDOMNOde().value, this.props.index);
+    this.props.onChange(this.refs.newText.getDOMNode().value, this.props.index);
   },
   remove: function() {
     this.props.onRemove(this.props.index);
@@ -62,6 +62,9 @@ var Note = React.createClass({
     }
   }
 });
+
+
+
 //To make a property validation we use board (the parent component of the notes)
 var Board = React.createClass({
   //Is a method that is part of the react library, and it handles validation
@@ -83,8 +86,13 @@ var Board = React.createClass({
   //Function that is going to return a list of notes
   getInitialState: function() {
     return {
-      notes: ["Call Bill", "Email Lisa", "Pickup Murphy", "Send proposal"]
+      notes: []
     };
+  },
+  add: function (text){
+var arr = this.state.notes; 
+arr.push(text);
+this.setState({notes: arr})
   },
   //This is going to take the newtext and the index.
   update: function(newText, i) {
@@ -113,8 +121,13 @@ var Board = React.createClass({
     );
   },
   //Inside we want to render a div with a classname of Board
+  //A map to paint all the notes inside the note array.
+  //We also add a button to add another note
+  //Bind is adding a placeholder to everynew note
   render: function() {
-    return <div className="board">{this.state.notes.map(this.eachNote)}</div>;
+    return <div className="board">{this.state.notes.map(this.eachNote)}
+    <button className="btn btn-sm glyphicon glyphicon-plus btn-success" onClick={this.add.bind(null, "New Note")} />
+    </div>;
   }
 });
 //The render will now return cunt
