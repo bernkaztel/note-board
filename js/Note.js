@@ -68,10 +68,24 @@ var Board = React.createClass({
             }
         }
     },
+//Function that is going to return a list of notes
+    getInitialState: function () {
+        return {
+            notes: [
+                "Call Bill",
+                "Email Lisa",
+                "Pickup Murphy",
+                "Send proposal"
+            ]
+        }
+    },
     //Inside we want to render a div with a classname of Board
     render: function () {
-        return <div className="board">{this.props.count}</div>
-    }
+        return (<div className="board">{this.state.notes.map(function (note, i){
+            return (<Note key={i}>{note}</Note>);
+        })}</div>
+        );
+    } 
 }) 
 //The render will now return cunt
 React.render(<Board count={10} />, 
