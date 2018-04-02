@@ -52,6 +52,27 @@ var Note = React.createClass({
         }
     }
 });
-
-React.render(<Note>Hello World</Note>, 
+//To make a property validation we use board (the parent component of the notes)
+var Board = React.createClass({
+    //Is a method that is part of the react library, and it handles validation
+    propTypes: {
+        //the property is count (the # of notes that appears on our board )
+        count: function (props, propName) {
+            //The first validation is that our count is always a number
+            if (typeof props[propName !== "number"]) {
+                return new Error("The count property must be a number")
+            } 
+            //If the count is higher than 100 we will return a error
+            if (props[propName] > 100) {
+                return new Error ("Creating " + props[propName] + " notes is ridiculous")
+            }
+        }
+    },
+    //Inside we want to render a div with a classname of Board
+    render: function () {
+        return <div className="board">{this.props.count}</div>
+    }
+}) 
+//The render will now return cunt
+React.render(<Board count={10} />, 
     document.getElementById('react-container'));
